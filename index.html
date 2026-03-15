@@ -21,8 +21,6 @@
   --hit-hover:   rgba(255,255,255,0.035);
   --tt-bg:       rgba(5,4,10,0.97);
   --tt-border:   rgba(200,160,80,0.28);
-  --scroll-track:rgba(200,160,80,0.08);
-  --scroll-thumb:rgba(200,160,80,0.30);
 }
 html.light {
   --bg:          #fdf8ee;
@@ -37,8 +35,6 @@ html.light {
   --hit-hover:   rgba(0,0,0,0.04);
   --tt-bg:       rgba(253,248,238,0.98);
   --tt-border:   rgba(122,80,16,0.25);
-  --scroll-track:rgba(122,80,16,0.07);
-  --scroll-thumb:rgba(122,80,16,0.28);
 }
 
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -144,39 +140,21 @@ svg{width:100%;height:100%;overflow:visible;}
   font-family:'Cinzel',serif;font-size:0.52rem;letter-spacing:0.14em;
   color:var(--gold-dim);text-transform:uppercase;
 }
-.tt-verse-count{
-  font-family:'Cinzel',serif;font-size:0.52rem;letter-spacing:0.08em;
-  color:var(--gold);background:var(--gold-ghost);
-  border:1px solid var(--gold-faint);border-radius:20px;
-  padding:1px 8px;
-}
 
-/* scrollable verse list */
-.tt-verse-scroll{
-  max-height:196px;overflow-y:auto;padding:0 16px 12px;
-  scrollbar-width:thin;
-  scrollbar-color:var(--scroll-thumb) var(--scroll-track);
-}
-.tt-verse-scroll::-webkit-scrollbar{width:4px;}
-.tt-verse-scroll::-webkit-scrollbar-track{background:var(--scroll-track);}
-.tt-verse-scroll::-webkit-scrollbar-thumb{background:var(--scroll-thumb);border-radius:4px;}
 
-.tt-verse-item{
-  padding:6px 0;
-  border-bottom:1px solid var(--tt-border);
-}
-.tt-verse-item:last-child{border-bottom:none;}
+/* single verse block */
+.tt-verse-body{padding:0 16px 13px;}
 .tv-num{
-  font-family:'Cinzel',serif;font-size:0.48rem;letter-spacing:0.12em;
-  color:var(--gold-dim);margin-bottom:3px;
+  font-family:'Cinzel',serif;font-size:0.48rem;letter-spacing:0.14em;
+  color:var(--gold-dim);margin-bottom:5px;
 }
 .tv-ta{
-  font-family:'Noto Serif Tamil',serif;font-size:0.88rem;font-weight:500;
-  color:var(--text-bright);line-height:1.6;margin-bottom:2px;
+  font-family:'Noto Serif Tamil',serif;font-size:0.92rem;font-weight:500;
+  color:var(--text-bright);line-height:1.65;margin-bottom:4px;
 }
 .tv-en{
-  font-family:'EB Garamond',serif;font-size:0.71rem;font-style:italic;
-  color:var(--text-mid);line-height:1.5;
+  font-family:'EB Garamond',serif;font-size:0.73rem;font-style:italic;
+  color:var(--text-mid);line-height:1.55;
 }
 
 .tt-no-verse{
@@ -230,6 +208,20 @@ footer{
 #legendClear.show{display:block;}
 #legendClear:hover{color:var(--gold);border-color:var(--gold-dim);}
 
+.full-works-link{
+  text-align:center;padding:6px 20px 2px;
+  font-family:'EB Garamond',serif;font-style:italic;
+  font-size:0.76rem;color:var(--text-soft);letter-spacing:0.08em;
+  transition:color 0.4s;
+}
+.full-works-link a{
+  color:var(--gold);text-decoration:none;
+  border-bottom:1px solid var(--gold-faint);
+  padding-bottom:1px;transition:color 0.2s,border-color 0.2s;
+}
+.full-works-link a:hover{
+  color:var(--text-bright);border-color:var(--gold-dim);
+}
 .attribution{
   width:100%;text-align:center;padding:6px 0 18px;
   font-family:'EB Garamond',serif;font-style:italic;
@@ -252,7 +244,7 @@ footer{
   <div class="h-sub">Avvaiyār's Āttichūḍi · ஒளவையாரின் ஆத்திசூடி</div>
   <div class="coverage-row">
     <span class="cov-badge">உயிர் 12 &ensp;·&ensp; மெய் 18 &ensp;·&ensp; ஆய்தம் 1</span>
-    <span class="cov-badge">109 āttichūḍi verses · hover to explore</span>
+    <span class="cov-badge">31 of 109 āttichūḍi verses · one per letter shown</span>
   </div>
 </header>
 
@@ -278,16 +270,27 @@ footer{
   <div class="tt-verse-header"  id="tt-vhdr">
     <span class="tt-verse-poet">ஆத்திசூடி · Āttichūḍi</span>
   </div>
-  <div class="tt-verse-scroll" id="tt-vscroll"></div>
-  <div class="tt-no-verse"     id="tt-novs" style="display:none">
+  <div class="tt-verse-body" id="tt-vbody">
+    <div class="tv-num"  id="tv-num"></div>
+    <div class="tv-ta"   id="tv-ta"></div>
+    <div class="tv-en"   id="tv-en"></div>
+  </div>
+  <div class="tt-no-verse" id="tt-novs" style="display:none">
     இந்த எழுத்துக்கு ஆத்திசூடி இல்லை — No Āttichūḍi verse for this letter
   </div>
 </div>
 
 <footer id="footer"></footer>
 <div id="legendClear" onclick="clearHL()">✕ Clear Filter</div>
+<div class="full-works-link">
+  Complete works →
+  <a href="https://www.aramseyavirumbu.com/" target="_blank" rel="noopener">
+    aramseyavirumbu.com
+  </a>
+  &ensp;·&ensp; ஆத்திசூடி — 109 verses with commentary
+</div>
 <div class="attribution">
-  ஒளவையார் · Avvaiyār — ஆத்திசூடி, ~12th c. CE · The complete 109 ethical verses
+  ஒளவையார் · Avvaiyār — ஆத்திசூடி, ~12th c. CE ·
 </div>
 <div class="attribution" style="padding-top:0;padding-bottom:24px;opacity:0.55;">
   Visualization by Lakshmi Ganesan &ensp;·&ensp; 2026 &ensp;·&ensp; Built with Claude
@@ -631,15 +634,6 @@ function buildChart(){
       const dotR=RCO-10;
       const[dx,dy]=polar(CX,CY,dotR,amid);
       SV.appendChild(el('circle',{cx:dx,cy:dy,r:'3',fill:col,'fill-opacity':'0.48'}));
-
-      // Verse count pip (number of verses)
-      const vcount=(LETTER_VERSES[c.root]||[]).length;
-      if(vcount>1){
-        const[px,py]=polar(CX,CY,dotR,amid);
-        const pip=tEl(`${vcount}`,px+5,py-4,{'text-anchor':'start','dominant-baseline':'central',
-          'font-family':'Cinzel, serif','font-size':'6.5',fill:col,'fill-opacity':'0.55'});
-        SV.appendChild(pip);
-      }
     }
   });
 
@@ -696,26 +690,15 @@ function showTT(e,rec,col,cls){
 
   document.getElementById('tt-vdiv').style.display  = hasV?'block':'none';
   document.getElementById('tt-vhdr').style.display  = hasV?'flex':'none';
-  document.getElementById('tt-vscroll').style.display=hasV?'block':'none';
+  document.getElementById('tt-vbody').style.display = hasV?'block':'none';
   document.getElementById('tt-novs').style.display  = hasV?'none':'block';
 
   if(hasV){
-
-    // Build scrollable verse list
-    const scroll=document.getElementById('tt-vscroll');
-    scroll.innerHTML='';
-    vnums.forEach((n,idx)=>{
-      const v=ATCHI[n];
-      if(!v)return;
-      const item=document.createElement('div');
-      item.className='tt-verse-item';
-      if(idx===0) item.style.paddingBottom='8px';
-      item.innerHTML=`
-        <div class="tv-num" style="${idx===0?'opacity:0.7':''}">VERSE ${n} OF 109</div>
-        <div class="tv-ta" style="${idx>0?'font-size:0.82rem;opacity:0.85':'}'}">${v.ta}</div>
-        <div class="tv-en" style="${idx>0?'opacity:0.75':''}">${v.en}</div>`;
-      scroll.appendChild(item);
-    });
+    const n=vnums[0];
+    const v=ATCHI[n];
+    document.getElementById('tv-num').textContent = `VERSE ${n} OF 109`;
+    document.getElementById('tv-ta').textContent  = v.ta;
+    document.getElementById('tv-en').textContent  = v.en;
   }
 
   ttEl.classList.add('on');
