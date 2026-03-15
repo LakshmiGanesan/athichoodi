@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>தமிழ் எழுத்து மண்டலம் · v3.0</title>
+<title>தமிழ் எழுத்து மண்டலம் · Tamizh Ezhuttu Maṇḍalam v3.0</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Noto+Serif+Tamil:wght@300;400;500;600;700&display=swap');
 
@@ -60,15 +60,16 @@ body{
 
 /* ── HEADER ── */
 header{text-align:center;padding:24px 20px 2px;}
-.h-en{
-  font-family:'Cinzel',serif;font-weight:700;
-  font-size:clamp(0.85rem,2.1vw,1.45rem);letter-spacing:0.26em;
-  color:var(--gold);text-transform:uppercase;transition:color 0.4s;
-}
 .h-ta{
-  font-family:'Noto Serif Tamil',serif;font-weight:600;
-  font-size:clamp(1.1rem,2.8vw,1.85rem);color:var(--gold-dim);
-  margin-top:1px;transition:color 0.4s;
+  font-family:'Noto Serif Tamil',serif;font-weight:700;
+  font-size:clamp(1.2rem,3vw,2rem);color:var(--gold);
+  margin-top:0;letter-spacing:0.04em;transition:color 0.4s;
+}
+.h-en{
+  font-family:'Cinzel',serif;font-weight:400;
+  font-size:clamp(0.7rem,1.5vw,1rem);letter-spacing:0.26em;
+  color:var(--gold-dim);text-transform:uppercase;
+  margin-top:2px;transition:color 0.4s;
 }
 .h-sub{
   font-family:'EB Garamond',serif;font-style:italic;
@@ -180,8 +181,8 @@ footer{
 .leg-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
 .leg-text-wrap{display:flex;flex-direction:column;gap:0;}
 .leg-en{font-family:'Cinzel',serif;font-size:.55rem;letter-spacing:.06em;color:var(--text-mid);}
-.leg-ta{font-family:'Noto Serif Tamil',serif;font-size:.58rem;color:var(--gold-dim);}
-.leg-rom{font-family:'EB Garamond',serif;font-style:italic;font-size:.56rem;color:var(--text-soft);}
+.leg-ta{font-family:'Noto Serif Tamil',serif;font-size:.70rem;color:var(--gold);font-weight:600;}
+.leg-rom{font-family:'EB Garamond',serif;font-style:italic;font-size:.58rem;color:var(--text-soft);}
 .leg-div{
   width:100%;text-align:center;color:var(--gold-dim);
   font-size:.50rem;letter-spacing:.1em;padding:2px 0;font-family:'Cinzel',serif;
@@ -239,12 +240,12 @@ footer{
 </div>
 
 <header>
-  <div class="h-en">Tamil Eḻuttu Maṇḍalam</div>
   <div class="h-ta">தமிழ் எழுத்து மண்டலம்</div>
-  <div class="h-sub">Avvaiyār's Āttichūḍi · ஒளவையாரின் ஆத்திசூடி</div>
+  <div class="h-en">Tamizh Ezhuttu Maṇḍalam</div>
+  <div class="h-sub">ஒளவையாரின் ஆத்திசூடி · Avvaiyār's Āttichūḍi</div>
   <div class="coverage-row">
     <span class="cov-badge">உயிர் 12 &ensp;·&ensp; மெய் 18 &ensp;·&ensp; ஆய்தம் 1</span>
-    <span class="cov-badge">31 of 109 āttichūḍi verses · one per letter shown</span>
+    <span class="cov-badge">ஆத்திசூடி 109-இல் 31 · one per letter shown</span>
   </div>
 </header>
 
@@ -676,7 +677,7 @@ function showTT(e,rec,col,cls){
   const isV=(cls==='uyir');
   const letter=isV?rec.ta:rec.root;
 
-  document.getElementById('tt-cat').textContent = isV?'உயிர் · VOWEL':'மெய் · CONSONANT';
+  document.getElementById('tt-cat').textContent = isV?'உயிர் · Vowel':'மெய் · Consonant';
   document.getElementById('tt-cat').style.color = col;
   document.getElementById('tt-ta').textContent  = letter;
   document.getElementById('tt-ta').style.color  = col;
@@ -755,14 +756,14 @@ function onLeg(cat){activeCat===cat?clearHL():(activeCat=cat,applyHL(cat));}
 // ── LEGEND BUILD
 const footer=document.getElementById('footer');
 [
-  {col:PC.kuril,    en:'Kuṟil',    ta:'குறில்',    rom:'Short vowel',   cat:'kuril'},
-  {col:PC.nedil,    en:'Neṭil',    ta:'நெடில்',    rom:'Long vowel',    cat:'nedil'},
-  {col:PC.melmoḻi, en:'Mēlmoḻi', ta:'மேல்மொழி',  rom:'ஐ and ஔ',      cat:'melmoḻi'},
-  {col:PC.aytam,    en:'Āytam',    ta:'ஆய்தம்',   rom:'ஃ',             cat:'aytam'},
+  {col:PC.kuril,     ta:'குறில்',    rom:'Kuzhil · Short vowel',   cat:'kuril'},
+  {col:PC.nedil,     ta:'நெடில்',    rom:'Nedil · Long vowel',     cat:'nedil'},
+  {col:PC.melmoḻi,  ta:'மேல்மொழி',  rom:'Mēlmozhi · ஐ and ஔ',   cat:'melmoḻi'},
+  {col:PC.aytam,     ta:'ஆய்தம்',   rom:'Āytam · ஃ',              cat:'aytam'},
   null,
-  {col:PC.vallinam,  en:'Valliṇam',  ta:'வல்லினம்', rom:'Hard stops',    cat:'vallinam'},
-  {col:PC.mellinam,  en:'Meḷḷiṇam', ta:'மெல்லினம்', rom:'Nasals',        cat:'mellinam'},
-  {col:PC.idaiyinam, en:'Idaiyiṇam', ta:'இடையினம்', rom:'Middle glides', cat:'idaiyinam'},
+  {col:PC.vallinam,  ta:'வல்லினம்',  rom:'Vallinam · Hard stops',  cat:'vallinam'},
+  {col:PC.mellinam,  ta:'மெல்லினம்', rom:'Mellinam · Nasals',      cat:'mellinam'},
+  {col:PC.idaiyinam, ta:'இடையினம்',  rom:'Idaiyinam · Middle',     cat:'idaiyinam'},
 ].forEach(item=>{
   if(!item){
     const d=document.createElement('div');d.className='leg-div';
@@ -773,7 +774,6 @@ const footer=document.getElementById('footer');
   d.addEventListener('click',()=>onLeg(item.cat));
   d.innerHTML=`<div class="leg-dot" style="background:${item.col}"></div>
     <div class="leg-text-wrap">
-      <span class="leg-en">${item.en}</span>
       <span class="leg-ta">${item.ta}</span>
       <span class="leg-rom">${item.rom}</span>
     </div>`;
