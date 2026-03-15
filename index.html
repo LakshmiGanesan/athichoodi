@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>தமிழ் எழுத்து மண்டலம் · Tamil Eḻuttu Maṇḍalam v2.0</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Noto+Serif+Tamil:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --bg:           #060408;
+  --header-title: #c8a050;
+  --header-sub:   rgba(200,160,80,0.40);
+  --badge-text:   rgba(200,160,80,0.55);
+  --badge-border: rgba(200,160,80,0.22);
+  --ring-bold:    rgba(200,160,80,0.42);
+  --ring-soft:    rgba(200,160,80,0.18);
+  --ctr-fill:     #080508;
+  --ctr-stroke:   rgba(200,160,80,0.48);
+  --hit-hover:    rgba(255,255,255,0.04);
+  --tt-bg:        rgba(6,4,8,0.97);
+  --tt-border:    rgba(200,160,80,0.32);
+  --tt-cat:       rgba(200,160,80,0.55);
+  --tt-ta:        #f5e8c8;
+  --tt-rom:       rgba(200,160,80,0.72);
+  --tt-verse:     rgba(245,232,200,0.78);
+  --tt-trans:     rgba(245,232,200,0.48);
+  --tt-num:       rgba(200,160,80,0.38);
+  --leg-text:     rgba(245,232,200,0.50);
+  --attr-text:    rgba(200,160,80,0.38);
+}
+html.light {
+  --bg:           #fdf8ee;
+  --header-title: #7a5010;
+  --header-sub:   rgba(122,80,16,0.50);
+  --badge-text:   rgba(122,80,16,0.58);
+  --badge-border: rgba(122,80,16,0.22);
+  --ring-bold:    rgba(90,60,15,0.40);
+  --ring-soft:    rgba(90,60,15,0.16);
+  --ctr-fill:     #f0e8d4;
+  --ctr-stroke:   rgba(90,60,15,0.45);
+  --hit-hover:    rgba(0,0,0,0.04);
+  --tt-bg:        rgba(253,248,238,0.98);
+  --tt-border:    rgba(122,80,16,0.28);
+  --tt-cat:       rgba(122,80,16,0.55);
+  --tt-ta:        #1a0e04;
+  --tt-rom:       rgba(122,80,16,0.70);
+  --tt-verse:     rgba(20,12,4,0.80);
+  --tt-trans:     rgba(20,12,4,0.50);
+  --tt-num:       rgba(122,80,16,0.40);
+  --leg-text:     rgba(20,12,4,0.55);
+  --attr-text:    rgba(122,80,16,0.48);
+}
+
+*{margin:0;padding:0;box-sizing:border-box;}
+body{
+  background:var(--bg);
+  display:flex;flex-direction:column;align-items:center;
+  min-height:100vh;font-family:'EB Garamond',serif;
+  transition:background 0.4s;
+}
+
+.toggle-wrap{position:fixed;top:16px;right:20px;z-index:1000;}
+.toggle-btn{
+  display:flex;align-items:center;gap:7px;
+  font-family:'Cinzel',serif;font-size:0.60rem;letter-spacing:0.12em;
+  color:var(--badge-text);background:var(--bg);
+  border:1px solid var(--ring-bold);border-radius:20px;
+  padding:7px 16px;cursor:pointer;
+  text-transform:uppercase;box-shadow:0 2px 14px rgba(0,0,0,0.28);
+  transition:color 0.3s,border-color 0.3s,background 0.4s;
+}
+.toggle-btn:hover{color:var(--header-title);border-color:var(--header-title);}
+
+header{text-align:center;padding:26px 20px 4px;}
+.h-en{
+  font-family:'Cinzel',serif;font-weight:700;
+  font-size:clamp(0.9rem,2.2vw,1.5rem);letter-spacing:0.24em;
+  color:var(--header-title);text-transform:uppercase;transition:color 0.4s;
+}
+.h-ta{
+  font-family:'Noto Serif Tamil',serif;font-weight:600;
+  font-size:clamp(1.1rem,2.8vw,1.9rem);color:var(--header-sub);
+  margin-top:2px;letter-spacing:0.04em;transition:color 0.4s;
+}
+.h-sub{
+  font-family:'EB Garamond',serif;font-style:italic;
+  color:var(--header-sub);font-size:0.76rem;letter-spacing:0.20em;margin-top:3px;
+}
+.pi-badge{
+  display:inline-block;margin-top:7px;font-family:'Cinzel',serif;font-size:0.58rem;
+  letter-spacing:0.18em;color:var(--badge-text);
+  border:1px solid var(--badge-border);border-radius:20px;padding:2px 12px;
+  transition:color 0.4s,border-color 0.4s;
+}
+
+.wrap{width:min(96vw,880px);aspect-ratio:1;margin:4px auto 0;}
+svg{width:100%;height:100%;overflow:visible;}
+
+/* ── TOOLTIP ── */
+#tt{
+  position:fixed;background:var(--tt-bg);border:1px solid var(--tt-border);
+  border-radius:10px;padding:13px 16px;pointer-events:none;opacity:0;
+  transition:opacity .15s;z-index:999;min-width:230px;max-width:300px;
+  box-shadow:0 8px 36px rgba(0,0,0,0.32);
+}
+#tt.on{opacity:1;}
+.tt-cat{font-family:'Cinzel',serif;font-size:.56rem;color:var(--tt-cat);
+  letter-spacing:.16em;text-transform:uppercase;margin-bottom:4px;}
+.tt-ta{font-family:'Noto Serif Tamil',serif;font-size:2.8rem;font-weight:600;
+  color:var(--tt-ta);line-height:1.1;margin-bottom:1px;}
+.tt-rom{font-family:'EB Garamond',serif;font-style:italic;font-size:1rem;
+  color:var(--tt-rom);margin-bottom:5px;}
+.tt-type-tag{display:inline-block;margin-bottom:7px;
+  font-family:'Noto Serif Tamil',serif;font-size:0.72rem;
+  color:var(--tt-cat);padding:1px 0;}
+.tt-divider{height:1px;background:var(--tt-border);margin:6px 0 8px;}
+.tt-verse-head{
+  display:flex;align-items:center;gap:6px;margin-bottom:5px;
+}
+.tt-verse-num{
+  font-family:'Cinzel',serif;font-size:0.52rem;letter-spacing:0.10em;
+  color:var(--tt-num);background:rgba(200,160,80,0.10);
+  border:1px solid rgba(200,160,80,0.20);border-radius:20px;
+  padding:1px 7px;flex-shrink:0;
+}
+.tt-verse-poet{font-family:'Cinzel',serif;font-size:0.52rem;letter-spacing:0.12em;
+  color:var(--tt-cat);text-transform:uppercase;}
+.tt-verse-ta{
+  font-family:'Noto Serif Tamil',serif;font-size:0.90rem;font-weight:500;
+  color:var(--tt-verse);line-height:1.65;margin-bottom:4px;
+}
+.tt-verse-en{
+  font-family:'EB Garamond',serif;font-size:0.74rem;font-style:italic;
+  color:var(--tt-trans);line-height:1.55;
+}
+.tt-no-verse{font-family:'EB Garamond',serif;font-size:0.72rem;font-style:italic;
+  color:var(--tt-num);margin-top:4px;}
+
+/* ── LEGEND + FOOTER ── */
+footer{display:flex;flex-wrap:wrap;justify-content:center;
+  gap:4px 14px;padding:8px 20px 4px;max-width:860px;}
+.leg{display:flex;align-items:center;gap:6px;font-family:'Cinzel',serif;
+  font-size:.56rem;color:var(--leg-text);letter-spacing:.06em;
+  cursor:pointer;border-radius:6px;padding:3px 6px;margin:-3px -6px;
+  transition:background 0.2s;}
+.leg:hover{background:var(--hit-hover);}
+.leg.active{background:rgba(200,160,80,0.08);}
+.leg-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;}
+.leg-text-wrap{display:flex;flex-direction:column;gap:0px;}
+.leg-en{font-family:'Cinzel',serif;font-size:.56rem;letter-spacing:.06em;color:var(--leg-text);}
+.leg-ta{font-family:'Noto Serif Tamil',serif;font-size:.60rem;color:var(--badge-text);}
+.leg-rom{font-family:'EB Garamond',serif;font-style:italic;font-size:.58rem;color:var(--badge-text);opacity:0.65;}
+.leg-div{width:100%;text-align:center;color:var(--badge-text);
+  font-size:.52rem;letter-spacing:.1em;padding:2px 0;font-family:'Cinzel',serif;}
+.leg-div-ta{font-family:'Noto Serif Tamil',serif;font-size:.58rem;display:block;opacity:0.55;margin-top:1px;}
+
+@keyframes segPulse{
+  0%  {filter:brightness(1)   drop-shadow(0 0 0px currentColor);}
+  40% {filter:brightness(2.0) drop-shadow(0 0 10px currentColor);}
+  100%{filter:brightness(1.5) drop-shadow(0 0 4px currentColor);}
+}
+.seg-pulse{animation:segPulse 0.55s ease-out forwards;}
+.seg-dim  {opacity:0.06!important;transition:opacity 0.25s;}
+.seg-bright{opacity:1!important;transition:opacity 0.25s;}
+
+#legendClear{
+  display:none;margin:5px auto 0;
+  font-family:'Cinzel',serif;font-size:0.57rem;letter-spacing:0.12em;
+  text-transform:uppercase;color:var(--badge-text);
+  background:var(--bg);border:1px solid var(--ring-bold);
+  border-radius:20px;padding:4px 14px;cursor:pointer;
+  transition:color 0.2s,border-color 0.2s,background 0.4s;
+}
+#legendClear.show{display:block;}
+#legendClear:hover{color:var(--header-title);border-color:var(--header-title);}
+
+.attribution{
+  width:100%;text-align:center;padding:8px 0 20px;
+  font-family:'EB Garamond',serif;font-style:italic;
+  font-size:0.74rem;color:var(--attr-text);
+  letter-spacing:0.12em;transition:color 0.4s;
+}
+</style>
+</head>
+<body>
+
+<div class="toggle-wrap">
+  <button class="toggle-btn" onclick="toggleTheme()">
+    <span id="tIcon">☀</span>&nbsp;<span id="tLabel">Light</span>
+  </button>
+</div>
+
+<header>
+  <div class="h-en">Tamil Eḻuttu Maṇḍalam</div>
+  <div class="h-ta">தமிழ் எழுத்து மண்டலம்</div>
+  <div class="h-sub">with Avvaiyār's Āttichūḍi · ஒளவையாரின் ஆத்திசூடி · 109 verses</div>
+  <div class="pi-badge">உயிர் 13 · மெய் 18 · ஆத்திசூடி 109</div>
+</header>
+
+<div class="wrap">
+  <svg id="SV" viewBox="0 0 900 900" xmlns="http://www.w3.org/2000/svg"></svg>
+</div>
+
+<div id="tt">
+  <div class="tt-cat"       id="tt-cat"></div>
+  <div class="tt-ta"        id="tt-ta"></div>
+  <div class="tt-rom"       id="tt-rom"></div>
+  <div class="tt-type-tag"  id="tt-type"></div>
+  <div class="tt-divider"   id="tt-div"></div>
+  <div class="tt-verse-head" id="tt-vhead">
+    <span class="tt-verse-num"  id="tt-vnum"></span>
+    <span class="tt-verse-poet">ஆத்திசூடி · Āttichūḍi</span>
+  </div>
+  <div class="tt-verse-ta"  id="tt-vta"></div>
+  <div class="tt-verse-en"  id="tt-ven"></div>
+  <div class="tt-no-verse"  id="tt-novs" style="display:none">No Āttichūḍi verse for this letter</div>
+</div>
+
+<footer id="footer"></footer>
+<div id="legendClear" onclick="clearLegendHighlight()">✕ Clear Filter</div>
+
+<div class="attribution">
+  ஒளவையார் · Avvaiyār — ஆத்திசூடி, ~12th c. CE · The complete 109 ethical verses
+</div>
+
+<script>
+// ══════════════════════════════════════════════════════
+// TERMINOLOGY (pure Tamil, from Tolkāppiyam tradition)
+// ══════════════════════════════════════════════════════
+// உயிர்   = vowels (breath-letters)
+// மெய்    = consonants (body-letters)
+// உயிர்மெய் = compound letters
+// குறில்   = short vowel
+// நெடில்   = long vowel
+// மேல்மொழி = ஐ / ஔ  (NOT "diphthong" — Tamil grammatical term)
+// ஆய்தம்  = Āytam (the ஃ — unique Tamil phoneme)
+// வல்லினம் = hard consonants (க ச ட த ப ற)
+// மெல்லினம் = soft/nasal consonants (ங ஞ ண ந ம ன)
+// இடையினம் = middle consonants (ய ர ல வ ழ ள)
+// ══════════════════════════════════════════════════════
+
+function toggleTheme(){
+  const L=document.documentElement.classList.toggle('light');
+  document.getElementById('tIcon').textContent=L?'☾':'☀';
+  document.getElementById('tLabel').textContent=L?'Dark':'Light';
+}
+
+// ── COLORS
+const PC = {
+  kuril:      '#e8a030',   // short vowel — warm gold
+  nedil:      '#c06818',   // long vowel  — deep amber
+  melmoḻi:   '#4a9ecc',   // மேல்மொழி ஐ/ஔ — teal-blue
+  aytam:      '#7abf7a',   // ஆய்தம் ஃ — sage
+  vallinam:   '#c05050',   // hard — crimson
+  mellinam:   '#4a9ecc',   // nasal — steel blue
+  idaiyinam:  '#9878cc',   // middle — violet
+};
+
+// ── ALL 109 ĀTTICHŪḌI VERSES
+// Keyed by verse number. Each has a Tamil letter (the first letter of the verse),
+// the Tamil verse, and English meaning.
+// Source: PDF provided. English refined for clarity.
+const ATCHI = {
+  1:  { letter:'அ', ta:'அறம் செய விரும்பு.',         en:'Desire to do righteous deeds.' },
+  2:  { letter:'ஆ', ta:'ஆறுவது சினம்.',              en:'Let anger subside.' },
+  3:  { letter:'இ', ta:'இயல்வது கரவேல்.',            en:'Do not withhold what you are able to give.' },
+  4:  { letter:'ஈ', ta:'ஈவது விலக்கேல்.',            en:'Do not prevent another\'s act of giving.' },
+  5:  { letter:'உ', ta:'உடையது விளம்பேல்.',          en:'Do not boast about what you possess.' },
+  6:  { letter:'ஊ', ta:'ஊக்கமது கைவிடேல்.',         en:'Never give up effort and perseverance.' },
+  7:  { letter:'எ', ta:'எண் எழுத்து இகழேல்.',        en:'Do not neglect the learning of numbers and letters.' },
+  8:  { letter:'ஏ', ta:'ஏற்பது இகழ்ச்சி.',           en:'Begging is disgraceful.' },
+  9:  { letter:'ஐ', ta:'ஐயம் இட்டு உண்.',           en:'Share with the needy before you eat.' },
+  10: { letter:'ஒ', ta:'ஒப்புரவு ஒழுகு.',            en:'Live in harmony with the world.' },
+  11: { letter:'ஓ', ta:'ஓதுவது ஒழியேல்.',           en:'Never cease your pursuit of learning.' },
+  12: { letter:'ஔ', ta:'ஔவியம் பேசேல்.',            en:'Do not speak with jealousy or envy.' },
+  13: { letter:'ஃ', ta:'அஃகஞ் சுருக்கேல்.',          en:'Do not give short measure — be honest in commerce.' },
+  // ── மெய் section — verses begin with உயிர்மெய் (consonant+vowel)
+  // but we key them by the consonant root for lookup
+  14: { letter:'க', ta:'கண்டொன்று சொல்லேல்.',       en:'Do not say something other than what you have seen.' },
+  15: { letter:'ங', ta:'ஙப் போல் வளை.',             en:'Be flexible and adaptable, like the letter ங.' },
+  16: { letter:'ச', ta:'சனி நீராடு.',               en:'Bathe on Saturdays — maintain personal cleanliness.' },
+  17: { letter:'ஞ', ta:'ஞாயிறு போற்று.',            en:'Revere the sun — honour light and knowledge.' },
+  18: { letter:'ட', ta:'இடப்பட வீடு எடேல்.',        en:'Do not build a home in an unsuitable place.' },
+  19: { letter:'ண', ta:'இணக்கமறிந்து இணங்கு.',     en:'Act in harmony with understanding.' },
+  20: { letter:'த', ta:'தந்தை தாய்ப் பேண்.',        en:'Respect and care for your father and mother.' },
+  21: { letter:'ந', ta:'நன்றி மறவேல்.',             en:'Never forget gratitude.' },
+  22: { letter:'ப', ta:'பருவத்தே பயிர் செய்.',      en:'Cultivate your fields in the proper season.' },
+  23: { letter:'ம', ta:'மண்பறித்துண்ணேல்.',         en:'Do not exploit others for your own benefit.' },
+  24: { letter:'ய', ta:'இயபு அலாதன செய்யேல்.',     en:'Do not act against good and natural conduct.' },
+  25: { letter:'ர', ta:'அரவம் ஆட்டேல்.',            en:'Do not play with danger — avoid reckless acts.' },
+  26: { letter:'ல', ta:'இலவம் பஞ்சி துய்.',         en:'Live comfortably yet simply.' },
+  27: { letter:'வ', ta:'வஞ்சகம் பேசேல்.',           en:'Do not speak deceitfully.' },
+  28: { letter:'ழ', ta:'அழகு அலாதன செய்யேல்.',     en:'Avoid disgraceful and unbecoming actions.' },
+  29: { letter:'ள', ta:'இளமையில் கல்.',             en:'Learn while you are young.' },
+  30: { letter:'ற', ta:'அரனை மறவேல்.',             en:'Never forget the divine — remember righteousness.' },
+  31: { letter:'ன', ta:'அனுதினமும் ஆடேல்.',        en:'Avoid excessive indulgence every single day.' },
+  // ── Extended verses (உயிர்மெய் section from PDF rows 32–109)
+  32: { letter:'க', ta:'கவ்வை மற.',                 en:'Forgive and forget harsh and hurtful words.' },
+  33: { letter:'க', ta:'காப்பது வரதா.',             en:'Protect and preserve what is entrusted to you.' },
+  34: { letter:'க', ta:'கிழமைப்பட வாழ்.',           en:'Live with dignity and propriety.' },
+  35: { letter:'க', ta:'கீழ்மை அகற்று.',            en:'Remove pettiness and meanness from yourself.' },
+  36: { letter:'க', ta:'குணமது கைவிடேல்.',          en:'Never abandon your virtuous qualities.' },
+  37: { letter:'க', ta:'கூப்பிட்டு பரிவேல்.',       en:'Do not break good and valued friendships.' },
+  38: { letter:'க', ta:'கெட்பது ஒழி.',              en:'Abandon destructive and harmful actions.' },
+  39: { letter:'க', ta:'கேள்வி முயற்று.',           en:'Strive to seek knowledge through inquiry.' },
+  40: { letter:'க', ta:'கைவினை கரவேல்.',            en:'Do not conceal or neglect the skills of your hands.' },
+  41: { letter:'ச', ta:'சக்கர நெறி நில்.',          en:'Follow the righteous and principled path.' },
+  42: { letter:'ச', ta:'சான்றோர் இனத்திலிரு.',      en:'Associate with the wise and the learned.' },
+  43: { letter:'ச', ta:'சித்திரம் பேசேல்.',          en:'Avoid exaggeration and fanciful speech.' },
+  44: { letter:'ச', ta:'சீர்மை மறவேல்.',            en:'Do not forget your dignity and self-respect.' },
+  45: { letter:'ச', ta:'சுடரொளி போலிரு.',           en:'Be radiant in conduct, like a bright flame.' },
+  46: { letter:'ச', ta:'சொல்லை ஆய்ந்து சொல்.',     en:'Think carefully before you speak.' },
+  47: { letter:'ச', ta:'சோம்பல் தவிர்.',            en:'Shun laziness in all your endeavours.' },
+  48: { letter:'ச', ta:'செவ்வன் திருந்தச் செய்.',   en:'Do things properly and with care.' },
+  49: { letter:'ச', ta:'சற்றே பேணு.',               en:'Care for and cherish your family.' },
+  50: { letter:'ச', ta:'சொந்தம் காக்க.',            en:'Protect and preserve your relationships.' },
+  51: { letter:'த', ta:'தக்கோன் எனத் திரி.',        en:'Live so that others regard you as worthy.' },
+  52: { letter:'த', ta:'தானமது விரும்பு.',           en:'Cherish and love the act of giving.' },
+  53: { letter:'த', ta:'திருமாலை அறி.',             en:'Know and understand sacred wisdom.' },
+  54: { letter:'த', ta:'தீவினை அகற்று.',            en:'Drive out and abandon evil deeds.' },
+  55: { letter:'த', ta:'துன்பத்திடம் கொடேல்.',      en:'Do not invite suffering into your life.' },
+  56: { letter:'த', ta:'தூக்கி வினை செய்.',         en:'Act only after careful and deliberate thought.' },
+  57: { letter:'த', ta:'தெய்வம் இகழேல்.',           en:'Do not disrespect or mock the divine.' },
+  58: { letter:'த', ta:'தேசத்தோடு ஒத்து வாழ்.',    en:'Live in harmony with your society and community.' },
+  59: { letter:'ந', ta:'நல் இணக்கம் நாடு.',         en:'Always seek good and wholesome friendships.' },
+  60: { letter:'ந', ta:'நாடொப்பன செய்.',            en:'Act in ways appropriate to your land and people.' },
+  61: { letter:'ந', ta:'நிலையிலே திரியேல்.',        en:'Do not waver from your steadfast principles.' },
+  62: { letter:'ந', ta:'நிர்மலம் தவர்.',            en:'Avoid waste and carelessness.' },
+  63: { letter:'ந', ta:'நுண்மை நுகரேல்.',           en:'Do not indulge in trivialities and frivolities.' },
+  64: { letter:'ந', ta:'நூல் பல கல்.',              en:'Study and learn from many texts and traditions.' },
+  65: { letter:'ந', ta:'நெறி தவறேல்.',              en:'Do not deviate from the path of righteousness.' },
+  66: { letter:'ந', ta:'நேர்படவொழு.',               en:'Conduct yourself with honesty and uprightness.' },
+  67: { letter:'ப', ta:'பண்புடன் பேசு.',            en:'Speak with courtesy, grace, and good character.' },
+  68: { letter:'ப', ta:'பகை அகற்று.',               en:'Avoid and dispel hostility and enmity.' },
+  69: { letter:'ப', ta:'பழி தேறேல்.',               en:'Do not slander or speak ill of others.' },
+  70: { letter:'ப', ta:'புகழ் தேடு.',               en:'Strive to build a good and lasting reputation.' },
+  71: { letter:'ப', ta:'பொருள் வீணாக்கேல்.',        en:'Do not squander or waste your resources.' },
+  72: { letter:'ப', ta:'பொய்மை பேசேல்.',            en:'Do not speak falsehood — never lie.' },
+  73: { letter:'ப', ta:'போற்றுவாரைப் போற்று.',      en:'Respect and honour those who are worthy of honour.' },
+  74: { letter:'ப', ta:'போரிடல் பின்செல்லேல்.',     en:'Do not retreat or back away from your duty.' },
+  75: { letter:'ம', ta:'மதியை வளர்த்து.',           en:'Cultivate and develop your wisdom and intellect.' },
+  76: { letter:'ம', ta:'மனத்துக்கு மாசிலன் ஆ.',     en:'Keep your mind pure and untainted.' },
+  77: { letter:'ம', ta:'மெய்யை நிலைநிறுத்து.',      en:'Stand firmly by truth in all circumstances.' },
+  78: { letter:'ம', ta:'மொழி நயமுடன் பேசு.',        en:'Speak with grace, beauty, and eloquence.' },
+  79: { letter:'ம', ta:'முன்னோரை மதித்து வாழ்.',    en:'Respect your elders and live honourably.' },
+  80: { letter:'ம', ta:'மூத்தோர்க்கு இடம் கொடு.',   en:'Give precedence and place to the elderly.' },
+  81: { letter:'வ', ta:'வஞ்சகம் தவிர்.',            en:'Forsake and avoid all forms of deceit.' },
+  82: { letter:'வ', ta:'வாய்மை பேசு.',              en:'Speak truthfully at all times.' },
+  83: { letter:'வ', ta:'வினை நன்றாகச் செய்.',       en:'Perform all your actions with care and diligence.' },
+  84: { letter:'வ', ta:'வழிப்பட்டு பெற முயற்று.',   en:'Strive to earn honour through righteous means.' },
+  85: { letter:'வ', ta:'வீண் சண்டை செய்யேல்.',     en:'Avoid useless and needless quarrelling.' },
+  86: { letter:'வ', ta:'வீரம் காக்க.',              en:'Preserve and protect your courage and valour.' },
+  87: { letter:'வ', ta:'வெற்றி நோக்கு.',            en:'Aim towards success with determination.' },
+  88: { letter:'வ', ta:'வெளிப்படவாகேல்.',           en:'Do not let anger or frustration show outwardly.' },
+  89: { letter:'ய', ta:'யாது ஊரே நினை.',            en:'Consider every place your own — be at home everywhere.' },
+  90: { letter:'ய', ta:'யாரையும் இகழேல்.',           en:'Do not insult or demean anyone.' },
+  91: { letter:'ய', ta:'யோசித்துச் செய்.',           en:'Think thoroughly before you act.' },
+  92: { letter:'ர', ta:'ரகசியம் காக்க.',             en:'Guard and keep confidences entrusted to you.' },
+  93: { letter:'ர', ta:'ரீதியுடன் நட.',              en:'Act with propriety and correct conduct.' },
+  94: { letter:'ர', ta:'ருசியுடன் கல்.',             en:'Learn with enthusiasm, joy, and relish.' },
+  95: { letter:'ல', ta:'லாபம் கருதி செய்யேல்.',     en:'Do not act purely for personal gain.' },
+  96: { letter:'ல', ta:'லட்சியம் காக்க.',            en:'Hold on to your goals and maintain your purpose.' },
+  97: { letter:'ல', ta:'லாவகம் கற்று வாழ்.',         en:'Learn with skill and live adeptly.' },
+  98: { letter:'ல', ta:'லேசாக நினையேல்.',            en:'Do not underestimate things — take nothing lightly.' },
+  99: { letter:'வ', ta:'வாழ்க்கை நெறி காப்பு.',     en:'Protect and uphold the righteous path of life.' },
+  100:{ letter:'வ', ta:'வாய்ப்பை பயன்படுத்திக் கொள்.',en:'Make good use of every opportunity.' },
+  101:{ letter:'வ', ta:'வாழ்த்துக் கேள்.',          en:'Listen well to blessings and good wishes.' },
+  102:{ letter:'வ', ta:'வாழ்வு பெற நில்.',           en:'Stand firm in your effort to attain a good life.' },
+  103:{ letter:'உ', ta:'உத்தமனா இரு.',              en:'Be a noble and virtuous person.' },
+  104:{ letter:'ஊ', ta:'ஊருடன் சேர்ந்து வாழ்.',     en:'Live in harmony with your community.' },
+  105:{ letter:'வ', ta:'வெட்டென பேசேல்.',           en:'Do not speak harshly or abruptly.' },
+  106:{ letter:'வ', ta:'வேண்டா வினை செய்யேல்.',     en:'Do not act with selfish or harmful intent.' },
+  107:{ letter:'வ', ta:'வைகறைத் துயில் எழு.',       en:'Wake up early at dawn.' },
+  108:{ letter:'ஒ', ta:'ஒன்னாரைத் தேறேல்.',        en:'Do not rely on or trust your enemies.' },
+  109:{ letter:'ஓ', ta:'ஓர் சொல்லே.',              en:'Be impartial — speak with one voice of justice.' },
+};
+
+// Build letter → verse number map (first verse for each letter)
+// For the mandala tooltip we show the primary (first) verse for each letter
+const LETTER_PRIMARY = {}; // letter → verse number
+const LETTER_ALL = {};     // letter → [verse numbers]
+for(const [num, rec] of Object.entries(ATCHI)){
+  const n = parseInt(num);
+  const l = rec.letter;
+  if(!LETTER_PRIMARY[l]) LETTER_PRIMARY[l] = n;
+  if(!LETTER_ALL[l]) LETTER_ALL[l] = [];
+  LETTER_ALL[l].push(n);
+}
+
+// ── VOWEL DATA (உயிர்) — 12 + 1 ஆய்தம்
+const VOWELS = [
+  { ta:'அ', rom:'a',  type:'kuril',    typeTa:'குறில்',   desc:'Short a — the first breath' },
+  { ta:'ஆ', rom:'ā',  type:'nedil',    typeTa:'நெடில்',   desc:'Long ā' },
+  { ta:'இ', rom:'i',  type:'kuril',    typeTa:'குறில்',   desc:'Short i' },
+  { ta:'ஈ', rom:'ī',  type:'nedil',    typeTa:'நெடில்',   desc:'Long ī' },
+  { ta:'உ', rom:'u',  type:'kuril',    typeTa:'குறில்',   desc:'Short u' },
+  { ta:'ஊ', rom:'ū',  type:'nedil',    typeTa:'நெடில்',   desc:'Long ū' },
+  { ta:'எ', rom:'e',  type:'kuril',    typeTa:'குறில்',   desc:'Short e' },
+  { ta:'ஏ', rom:'ē',  type:'nedil',    typeTa:'நெடில்',   desc:'Long ē' },
+  { ta:'ஐ', rom:'ai', type:'melmoḻi', typeTa:'மேல்மொழி', desc:'ஐ — மேல்மொழி உயிர்' },
+  { ta:'ஒ', rom:'o',  type:'kuril',    typeTa:'குறில்',   desc:'Short o' },
+  { ta:'ஓ', rom:'ō',  type:'nedil',    typeTa:'நெடில்',   desc:'Long ō' },
+  { ta:'ஔ', rom:'au', type:'melmoḻi', typeTa:'மேல்மொழி', desc:'ஔ — மேல்மொழி உயிர்' },
+  { ta:'ஃ', rom:'aḵ', type:'aytam',   typeTa:'ஆய்தம்',  desc:'ஆய்தம் — unique Tamil phoneme' },
+];
+
+// ── CONSONANT DATA (மெய்) — 18
+// Order: traditional vallinam → mellinam → idaiyinam
+const CONSONANTS = [
+  { ta:'க்', root:'க', rom:'k',  type:'vallinam',  typeTa:'வல்லினம்',  desc:'Hard velar stop' },
+  { ta:'ச்', root:'ச', rom:'c',  type:'vallinam',  typeTa:'வல்லினம்',  desc:'Hard palatal/sibilant' },
+  { ta:'ட்', root:'ட', rom:'ṭ',  type:'vallinam',  typeTa:'வல்லினம்',  desc:'Hard retroflex stop' },
+  { ta:'த்', root:'த', rom:'t',  type:'vallinam',  typeTa:'வல்லினம்',  desc:'Hard dental stop' },
+  { ta:'ப்', root:'ப', rom:'p',  type:'vallinam',  typeTa:'வல்லினம்',  desc:'Hard labial stop' },
+  { ta:'ற்', root:'ற', rom:'ṟ',  type:'vallinam',  typeTa:'வல்லினம்',  desc:'Hard alveolar trill' },
+  { ta:'ங்', root:'ங', rom:'ṅ',  type:'mellinam',  typeTa:'மெல்லினம்', desc:'Nasal velar' },
+  { ta:'ஞ்', root:'ஞ', rom:'ñ',  type:'mellinam',  typeTa:'மெல்லினம்', desc:'Nasal palatal' },
+  { ta:'ண்', root:'ண', rom:'ṇ',  type:'mellinam',  typeTa:'மெல்லினம்', desc:'Nasal retroflex' },
+  { ta:'ந்', root:'ந', rom:'n',  type:'mellinam',  typeTa:'மெல்லினம்', desc:'Nasal dental' },
+  { ta:'ம்', root:'ம', rom:'m',  type:'mellinam',  typeTa:'மெல்லினம்', desc:'Nasal labial' },
+  { ta:'ன்', root:'ன', rom:'ṉ',  type:'mellinam',  typeTa:'மெல்லினம்', desc:'Nasal alveolar' },
+  { ta:'ய்', root:'ய', rom:'y',  type:'idaiyinam', typeTa:'இடையினம்',  desc:'Glide palatal' },
+  { ta:'ர்', root:'ர', rom:'r',  type:'idaiyinam', typeTa:'இடையினம்',  desc:'Alveolar tap' },
+  { ta:'ல்', root:'ல', rom:'l',  type:'idaiyinam', typeTa:'இடையினம்',  desc:'Lateral dental' },
+  { ta:'வ்', root:'வ', rom:'v',  type:'idaiyinam', typeTa:'இடையினம்',  desc:'Labio-dental glide' },
+  { ta:'ழ்', root:'ழ', rom:'ḻ',  type:'idaiyinam', typeTa:'இடையினம்',  desc:'Retroflex approximant (unique to Tamil)' },
+  { ta:'ள்', root:'ள', rom:'ḷ',  type:'idaiyinam', typeTa:'இடையினம்',  desc:'Lateral retroflex' },
+];
+
+// ── SVG UTILITIES
+const SVG_NS='http://www.w3.org/2000/svg';
+const SV=document.getElementById('SV');
+const CX=450,CY=450;
+
+function polar(cx,cy,r,deg){
+  const rad=deg*Math.PI/180;
+  return [cx+r*Math.cos(rad),cy+r*Math.sin(rad)];
+}
+function arcPath(cx,cy,r1,r2,a1,a2){
+  const [x1,y1]=polar(cx,cy,r1,a1),[x2,y2]=polar(cx,cy,r1,a2);
+  const [x3,y3]=polar(cx,cy,r2,a2),[x4,y4]=polar(cx,cy,r2,a1);
+  const lg=(a2-a1)>180?1:0;
+  return `M${x1},${y1} A${r1},${r1},0,${lg},1,${x2},${y2} L${x3},${y3} A${r2},${r2},0,${lg},0,${x4},${y4} Z`;
+}
+function svgEl(tag,a={}){
+  const e=document.createElementNS(SVG_NS,tag);
+  for(const[k,v]of Object.entries(a))e.setAttribute(k,v);
+  return e;
+}
+
+// ── RING RADII
+const RVO=432,RVI=328;   // vowel ring outer/inner
+const RCO=322,RCI=202;   // consonant ring outer/inner
+const RCTR=198;           // centre circle
+
+// Segment tracking for legend
+let allSegs=[];
+
+function buildChart(){
+  SV.innerHTML=''; allSegs=[];
+
+  // Defs & glow
+  const defs=svgEl('defs');
+  const rg=svgEl('radialGradient',{id:'bg',cx:'50%',cy:'50%',r:'50%'});
+  rg.innerHTML=`<stop offset="0%" stop-color="#c8a050" stop-opacity="0.06"/>
+                <stop offset="100%" stop-color="#c8a050" stop-opacity="0"/>`;
+  defs.appendChild(rg);
+  SV.appendChild(defs);
+  SV.appendChild(svgEl('circle',{cx:CX,cy:CY,r:RVO+10,fill:'url(#bg)'}));
+
+  // Decorative rings
+  [[RVO+6,0.38,'1.2'],[RVO,0.15,'0.5'],[RVI+2,0.38,'1'],[RVI-1,0.12,'0.4'],
+   [RCO+2,0.28,'0.8'],[RCO-1,0.10,'0.4'],[RCI+2,0.28,'0.8'],[RCI-1,0.10,'0.4'],
+   [RCTR,0.40,'1.2'],[RCTR-12,0.14,'0.5']
+  ].forEach(([r,op,sw])=>{
+    SV.appendChild(svgEl('circle',{cx:CX,cy:CY,r,fill:'none',
+      stroke:'#c8a050','stroke-opacity':op,'stroke-width':sw}));
+  });
+
+  // Tick marks
+  for(let i=0;i<72;i++){
+    const d=i*5,len=i%3===0?7:3;
+    const [x1,y1]=polar(CX,CY,RVO+8,d);
+    const [x2,y2]=polar(CX,CY,RVO+8-len,d);
+    SV.appendChild(svgEl('line',{x1,y1,x2,y2,stroke:'#c8a050',
+      'stroke-opacity':'0.20','stroke-width':'0.8'}));
+  }
+
+  // ── VOWEL RING (13 segments)
+  const VN=VOWELS.length, VDEG=360/VN, VGAP=1.2;
+  VOWELS.forEach((v,i)=>{
+    const a1=-90+i*VDEG+VGAP/2, a2=-90+(i+1)*VDEG-VGAP/2, amid=(a1+a2)/2;
+    const col=PC[v.type]||'#c8a050';
+    const seg=svgEl('path',{
+      d:arcPath(CX,CY,RVI+2,RVO-2,a1,a2),
+      fill:col,'fill-opacity':'0.16',
+      stroke:col,'stroke-opacity':'0.55','stroke-width':'1',
+    });
+    seg.setAttribute('data-seg-idx',i);
+    SV.appendChild(seg);
+    allSegs.push({el:seg,idx:i,cls:'uyir',type:v.type});
+
+    // Divider spokes
+    const [sx,sy]=polar(CX,CY,RVI,a1);
+    const [ex,ey]=polar(CX,CY,RVO,a1);
+    SV.appendChild(svgEl('line',{x1:sx,y1:sy,x2:ex,y2:ey,
+      stroke:'#c8a050','stroke-opacity':'0.22','stroke-width':'0.7'}));
+
+    // Hit area
+    const hit=svgEl('path',{d:arcPath(CX,CY,RVI,RVO,a1,a2),
+      fill:'transparent',stroke:'none',cursor:'pointer'});
+    hit.addEventListener('mouseenter',e=>showTT(e,v,col,'uyir'));
+    hit.addEventListener('mousemove',e=>moveTT(e));
+    hit.addEventListener('mouseleave',hideTT);
+    SV.appendChild(hit);
+
+    // Tamil letter label
+    const LR=(RVI+RVO)/2;
+    const [lx,ly]=polar(CX,CY,LR,amid);
+    const lbl=svgEl('text');
+    lbl.setAttribute('x',lx);lbl.setAttribute('y',ly);
+    lbl.setAttribute('text-anchor','middle');
+    lbl.setAttribute('dominant-baseline','central');
+    lbl.setAttribute('font-family','Noto Serif Tamil, serif');
+    lbl.setAttribute('font-size','24');lbl.setAttribute('font-weight','600');
+    lbl.setAttribute('fill',col);lbl.setAttribute('fill-opacity','0.92');
+    lbl.setAttribute('data-lbl-idx',i);
+    lbl.textContent=v.ta;
+    SV.appendChild(lbl);
+  });
+
+  // ── CONSONANT RING (18 segments)
+  const CN=CONSONANTS.length, CDEG=360/CN, CGAP=0.8;
+  CONSONANTS.forEach((c,i)=>{
+    const a1=-90+i*CDEG+CGAP/2, a2=-90+(i+1)*CDEG-CGAP/2, amid=(a1+a2)/2;
+    const col=PC[c.type]||'#c8a050';
+    const sidx=VOWELS.length+i;
+    const seg=svgEl('path',{
+      d:arcPath(CX,CY,RCI+2,RCO-2,a1,a2),
+      fill:col,'fill-opacity':'0.16',
+      stroke:col,'stroke-opacity':'0.55','stroke-width':'1',
+    });
+    seg.setAttribute('data-seg-idx',sidx);
+    SV.appendChild(seg);
+    allSegs.push({el:seg,idx:sidx,cls:'mey',type:c.type});
+
+    // Consonant spokes
+    const [sx,sy]=polar(CX,CY,RCI,a1);
+    const [ex,ey]=polar(CX,CY,RCO,a1);
+    SV.appendChild(svgEl('line',{x1:sx,y1:sy,x2:ex,y2:ey,
+      stroke:'#4a9ecc','stroke-opacity':'0.18','stroke-width':'0.6'}));
+
+    // Hit area
+    const hit=svgEl('path',{d:arcPath(CX,CY,RCI,RCO,a1,a2),
+      fill:'transparent',stroke:'none',cursor:'pointer'});
+    hit.addEventListener('mouseenter',e=>showTT(e,c,col,'mey'));
+    hit.addEventListener('mousemove',e=>moveTT(e));
+    hit.addEventListener('mouseleave',hideTT);
+    SV.appendChild(hit);
+
+    // Consonant label (pulli form)
+    const LR=(RCI+RCO)/2;
+    const [lx,ly]=polar(CX,CY,LR-8,amid);
+    const lbl=svgEl('text');
+    lbl.setAttribute('x',lx);lbl.setAttribute('y',ly);
+    lbl.setAttribute('text-anchor','middle');
+    lbl.setAttribute('dominant-baseline','central');
+    lbl.setAttribute('font-family','Noto Serif Tamil, serif');
+    lbl.setAttribute('font-size','16');lbl.setAttribute('font-weight','500');
+    lbl.setAttribute('fill',col);lbl.setAttribute('fill-opacity','0.90');
+    lbl.setAttribute('data-lbl-idx',sidx);
+    lbl.textContent=c.ta;
+    SV.appendChild(lbl);
+
+    // Root (bare consonant) below pulli
+    const [rx,ry]=polar(CX,CY,LR+14,amid);
+    const rlbl=svgEl('text');
+    rlbl.setAttribute('x',rx);rlbl.setAttribute('y',ry);
+    rlbl.setAttribute('text-anchor','middle');
+    rlbl.setAttribute('dominant-baseline','central');
+    rlbl.setAttribute('font-family','Noto Serif Tamil, serif');
+    rlbl.setAttribute('font-size','11');
+    rlbl.setAttribute('fill',col);rlbl.setAttribute('fill-opacity','0.42');
+    rlbl.textContent=c.root;
+    SV.appendChild(rlbl);
+  });
+
+  // ── CENTRE
+  SV.appendChild(svgEl('circle',{cx:CX,cy:CY,r:RCTR-2,
+    fill:'var(--ctr-fill)',stroke:'#c8a050',
+    'stroke-opacity':'0.48','stroke-width':'1.5'}));
+
+  // ஓம் glyph
+  const cOm=svgEl('text');
+  cOm.setAttribute('x',CX);cOm.setAttribute('y',CY-18);
+  cOm.setAttribute('text-anchor','middle');cOm.setAttribute('dominant-baseline','central');
+  cOm.setAttribute('font-family','Noto Serif Tamil, serif');
+  cOm.setAttribute('font-size','48');cOm.setAttribute('font-weight','600');
+  cOm.setAttribute('fill','#c8a050');cOm.setAttribute('fill-opacity','0.80');
+  cOm.textContent='ஓம்';
+  SV.appendChild(cOm);
+
+  const cSub=svgEl('text');
+  cSub.setAttribute('x',CX);cSub.setAttribute('y',CY+30);
+  cSub.setAttribute('text-anchor','middle');cSub.setAttribute('dominant-baseline','central');
+  cSub.setAttribute('font-family','Noto Serif Tamil, serif');cSub.setAttribute('font-size','14');
+  cSub.setAttribute('fill','#c8a050');cSub.setAttribute('fill-opacity','0.42');
+  cSub.textContent='தமிழ் எழுத்து';
+  SV.appendChild(cSub);
+
+  const cRing=svgEl('text');
+  cRing.setAttribute('x',CX);cRing.setAttribute('y',CY+54);
+  cRing.setAttribute('text-anchor','middle');cRing.setAttribute('dominant-baseline','central');
+  cRing.setAttribute('font-family','Noto Serif Tamil, serif');cRing.setAttribute('font-size','8.5');
+  cRing.setAttribute('fill','#c8a050');cRing.setAttribute('fill-opacity','0.28');
+  cRing.textContent='உயிர் · மெய் · உயிர்மெய் · ஆய்தம்';
+  SV.appendChild(cRing);
+
+  // ── ARC RING LABELS
+  drawArcText('உயிர் எழுத்துக்கள்',CX,CY,RVO+22,-40,60,'#c8a050',10,0.35);
+  drawArcText('மெய் எழுத்துக்கள்',CX,CY,RCO+14,-30,50,'#4a9ecc',9,0.30);
+}
+
+function drawArcText(str,cx,cy,r,startD,endD,col,fs,op){
+  const span=endD-startD,mid=startD+(span/2);
+  const id='ap'+Math.random().toString(36).slice(2,6);
+  const [sx,sy]=polar(cx,cy,r,startD);
+  const [ex,ey]=polar(cx,cy,r,endD);
+  const lg=span>180?1:0;
+  const p=svgEl('path',{id,d:`M${sx},${sy} A${r},${r},0,${lg},1,${ex},${ey}`,fill:'none'});
+  SV.appendChild(p);
+  const tp=document.createElementNS(SVG_NS,'textPath');
+  tp.setAttribute('href','#'+id);tp.setAttribute('startOffset','50%');
+  tp.setAttribute('text-anchor','middle');tp.textContent=str;
+  const t=svgEl('text');
+  t.setAttribute('font-family','Noto Serif Tamil, serif');
+  t.setAttribute('font-size',fs);t.setAttribute('fill',col);
+  t.setAttribute('fill-opacity',op);
+  t.appendChild(tp);SV.appendChild(t);
+}
+
+// ── TOOLTIP
+const ttEl=document.getElementById('tt');
+
+function showTT(e,rec,col,cls){
+  const isVowel=(cls==='uyir');
+  const lookupLetter = isVowel ? rec.ta : rec.root;
+
+  // Category label
+  let catLabel = isVowel
+    ? `உயிர் · VOWEL`
+    : `மெய் · CONSONANT`;
+
+  document.getElementById('tt-cat').textContent=catLabel;
+  document.getElementById('tt-ta').textContent = isVowel ? rec.ta : rec.root;
+  document.getElementById('tt-rom').textContent = rec.rom||'';
+  document.getElementById('tt-type').textContent = rec.typeTa||'';
+  document.getElementById('tt-type').style.color = col;
+
+  // Find verse
+  const vnum = LETTER_PRIMARY[lookupLetter];
+  const allNums = LETTER_ALL[lookupLetter] || [];
+  const verse = vnum ? ATCHI[vnum] : null;
+
+  const hasdiv = !!verse;
+  document.getElementById('tt-div').style.display   = hasdiv?'block':'none';
+  document.getElementById('tt-vhead').style.display = hasdiv?'flex':'none';
+  document.getElementById('tt-vta').style.display   = hasdiv?'block':'none';
+  document.getElementById('tt-ven').style.display   = hasdiv?'block':'none';
+  document.getElementById('tt-novs').style.display  = hasdiv?'none':'block';
+
+  if(verse){
+    const extra = allNums.length>1 ? ` +${allNums.length-1}` : '';
+    document.getElementById('tt-vnum').textContent  = `#${vnum}${extra}`;
+    document.getElementById('tt-vta').textContent   = verse.ta;
+    document.getElementById('tt-ven').textContent   = verse.en;
+  }
+
+  ttEl.classList.add('on');
+  moveTT(e);
+}
+function moveTT(e){
+  let x=e.clientX+16,y=e.clientY+16;
+  if(x+310>window.innerWidth) x=e.clientX-318;
+  if(y+280>window.innerHeight)y=e.clientY-288;
+  ttEl.style.left=x+'px';ttEl.style.top=y+'px';
+}
+function hideTT(){ttEl.classList.remove('on');}
+
+// ── LEGEND HIGHLIGHT
+let activeCat=null;
+
+function getMatches(cat){
+  const s=new Set();
+  allSegs.forEach(({idx,cls,type})=>{
+    let hit=false;
+    if(cat==='kuril')     hit=cls==='uyir'&&type==='kuril';
+    else if(cat==='nedil')    hit=cls==='uyir'&&type==='nedil';
+    else if(cat==='melmoḻi')  hit=cls==='uyir'&&type==='melmoḻi';
+    else if(cat==='aytam')    hit=cls==='uyir'&&type==='aytam';
+    else if(cat==='vallinam') hit=cls==='mey'&&type==='vallinam';
+    else if(cat==='mellinam') hit=cls==='mey'&&type==='mellinam';
+    else if(cat==='idaiyinam')hit=cls==='mey'&&type==='idaiyinam';
+    if(hit)s.add(idx);
+  });
+  return s;
+}
+function applyHL(cat){
+  const m=getMatches(cat);
+  document.querySelectorAll('[data-seg-idx]').forEach(el=>{
+    const i=parseInt(el.getAttribute('data-seg-idx'));
+    el.classList.remove('seg-pulse','seg-dim','seg-bright');
+    if(m.has(i)){el.classList.add('seg-bright');void el.offsetWidth;el.classList.add('seg-pulse');}
+    else el.classList.add('seg-dim');
+  });
+  document.querySelectorAll('[data-lbl-idx]').forEach(el=>{
+    el.style.opacity=m.has(parseInt(el.getAttribute('data-lbl-idx')))?'1':'0.05';
+  });
+  document.querySelectorAll('.leg').forEach(el=>el.classList.toggle('active',el.dataset.cat===cat));
+  document.getElementById('legendClear').classList.add('show');
+}
+function clearLegendHighlight(){
+  activeCat=null;
+  document.querySelectorAll('[data-seg-idx]').forEach(el=>
+    el.classList.remove('seg-pulse','seg-dim','seg-bright'));
+  document.querySelectorAll('[data-lbl-idx]').forEach(el=>el.style.opacity='');
+  document.querySelectorAll('.leg').forEach(el=>el.classList.remove('active'));
+  document.getElementById('legendClear').classList.remove('show');
+}
+function onLegClick(cat){
+  activeCat===cat?clearLegendHighlight():(activeCat=cat,applyHL(cat));
+}
+
+// ── BUILD LEGEND
+const footer=document.getElementById('footer');
+[
+  {col:PC.kuril,     en:'Kuṟil',     ta:'குறில்',     rom:'Short vowel',    cat:'kuril'},
+  {col:PC.nedil,     en:'Neṭil',     ta:'நெடில்',     rom:'Long vowel',     cat:'nedil'},
+  {col:PC.melmoḻi,  en:'Mēlmoḻi',  ta:'மேல்மொழி',   rom:'ஐ and ஔ',       cat:'melmoḻi'},
+  {col:PC.aytam,     en:'Āytam',     ta:'ஆய்தம்',    rom:'ஃ',              cat:'aytam'},
+  null,
+  {col:PC.vallinam,  en:'Valliṇam',  ta:'வல்லினம்',  rom:'Hard stops',     cat:'vallinam'},
+  {col:PC.mellinam,  en:'Meḷḷiṇam', ta:'மெல்லினம்',  rom:'Nasals',         cat:'mellinam'},
+  {col:PC.idaiyinam, en:'Idaiyiṇam', ta:'இடையினம்',  rom:'Middle glides',  cat:'idaiyinam'},
+].forEach(item=>{
+  if(!item){
+    const d=document.createElement('div');d.className='leg-div';
+    d.innerHTML='── மெய் எழுத்து வகைகள் ──<span class="leg-div-ta">Consonant classes</span>';
+    footer.appendChild(d);return;
+  }
+  const d=document.createElement('div');d.className='leg';
+  d.dataset.cat=item.cat;
+  d.title='Click to highlight';
+  d.addEventListener('click',()=>onLegClick(item.cat));
+  d.innerHTML=`
+    <div class="leg-dot" style="background:${item.col}"></div>
+    <div class="leg-text-wrap">
+      <span class="leg-en">${item.en}</span>
+      <span class="leg-ta">${item.ta}</span>
+      <span class="leg-rom">${item.rom}</span>
+    </div>`;
+  footer.appendChild(d);
+});
+
+buildChart();
+</script>
+</body>
+</html>
